@@ -1,0 +1,5 @@
+(setq denote-directory (expand-file-name "~/Notes/denote/"))
+(setq org-directory "~/Notes/org/")
+(setq org-agenda-files '("~/Notes/org"))
+(setq lemacs/notes-directory "~/Notes")
+(setq user-full-name "Jakub Szczerbowski")
