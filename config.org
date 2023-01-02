@@ -60,7 +60,6 @@ Example of sysvars.el
   (setq native-comp-async-report-warnings-errors nil)
   (setq warning-minimum-level :error)
   (setq bookmark-default-file (concat lemacs/config-dir "/bookmarks"))
-  (auto-save-visited-mode)
   (global-auto-revert-mode)
   (add-hook 'text-mode-hook 'tildify-mode)
   (setq ispell-dictionary "polish")
@@ -87,17 +86,17 @@ Example of sysvars.el
 #+end_src
 ** Backups
 #+begin_src emacs-lisp
-;; Save backup files to a dedicated directory.
-(setq backup-directory-alist `(("." . ,(concat lemacs/config-dir "/backups"))))
-(setq delete-old-versions -1)
+  ;; Save backup files to a dedicated directory.
+  (setq backup-directory-alist `(("." . ,(concat lemacs/config-dir "/backups"))))
+  (setq delete-old-versions -1)
 
-;; Make numeric backup versions unconditionally.
-(setq version-control t)
-(setq vc-make-backup-files t)
-(setq auto-save-file-name-transforms `((".*" ,(expand-file-name (concat lemacs/config-dir "/auto-save-list/")) t)))
-
-;; Do not create lock files.
-(setq create-lockfiles nil)
+  ;; Make numeric backup versions unconditionally.
+  (setq version-control t)
+  (setq vc-make-backup-files t)
+  (setq auto-save-file-name-transforms `((".*" ,(expand-file-name (concat lemacs/config-dir "/auto-save-list/")) t)))
+  (auto-save-visited-mode)
+  ;; Do not create lock files.
+  (setq create-lockfiles nil)
 #+end_src
 ** CUA-mode
 #+begin_src emacs-lisp
