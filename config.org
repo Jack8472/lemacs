@@ -59,12 +59,12 @@ Example of sysvars.el
     (setq comp-deferred-compilation t))
   (setq native-comp-async-report-warnings-errors nil)
   (setq warning-minimum-level :error)
-  (setq bookmark-default-file (concat lemacs/config-dir "/bookmarks"))
+  ;(setq bookmark-default-file (concat lemacs/config-dir "/bookmarks"))
   (global-auto-revert-mode)
   (add-hook 'text-mode-hook 'tildify-mode)
   (setq ispell-dictionary "polish")
   (setq use-short-answers t)
-  (setq recentf-save-file (concat lemacs/config-dir "/recentf"))
+  ;(setq recentf-save-file (concat lemacs/config-dir "/recentf"))
   (setq recentf-max-menu-items 50)
   (setq recentf-max-saved-items 50)
   (recentf-mode 1)
@@ -87,14 +87,13 @@ Example of sysvars.el
 ** Backups
 #+begin_src emacs-lisp
   ;; Save backup files to a dedicated directory.
-  (setq backup-directory-alist `(("." . ,(concat lemacs/config-dir "/backups"))))
+  (setq backup-directory-alist
+        `(("." . ,(concat lemacs/config-dir "/backups"))))
   (setq delete-old-versions -1)
-
+  (auto-save-visited-mode)
   ;; Make numeric backup versions unconditionally.
   (setq version-control t)
   (setq vc-make-backup-files t)
-  (setq auto-save-file-name-transforms `((".*" ,(expand-file-name (concat lemacs/config-dir "/auto-save-list/")) t)))
-  (auto-save-visited-mode)
   ;; Do not create lock files.
   (setq create-lockfiles nil)
 #+end_src
@@ -857,7 +856,7 @@ Example of sysvars.el
   (use-package yasnippet
   :config
   (yas-global-mode t)
-  (setq yas-snippet-dirs (concat lemacs/config-dir "/snippets"))
+  ;(setq yas-snippet-dirs (concat lemacs/config-dir "/snippets"))
   )
 #+end_src
 * Auto package update
@@ -969,17 +968,18 @@ This setting ensures that emacsclient always opens on *dashboard* rather than *s
 #+end_src
 ** TODO No littering
 #+begin_src emacs-lisp
-    ;; NOTE: If you want to move everything out of the ~/.emacs.d folder
-    ;; reliably, set `user-emacs-directory` before loading no-littering!
-    ;(setq user-emacs-directory "~/.cache/emacs")
+  ;; NOTE: If you want to move everything out of the ~/.emacs.d folder
+  ;; reliably, set `user-emacs-directory` before loading no-littering!
+  (setq user-emacs-directory lemacs/config-dir)
 
-    (use-package no-littering
-      :disabled t)
+  (use-package no-littering
+    ;:disabled t
+    )
 
-    ;; no-littering doesn't set this by default so we must place
-    ;; auto save files in the same path as it uses for sessions
-    ;; (setq auto-save-file-name-transforms
-    ;;       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+  ;; no-littering doesn't set this by default so we must place
+  ;; auto save files in the same path as it uses for sessions
+  (setq auto-save-file-name-transforms
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 #+end_src
 ** Command-log-mode
 #+begin_src emacs-lisp
