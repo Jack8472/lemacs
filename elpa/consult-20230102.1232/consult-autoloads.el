@@ -312,25 +312,6 @@ the asynchronous search.
 
 \(fn &optional INITIAL)" t nil)
 
-(autoload 'consult-apropos "consult" "\
-Select pattern and call `apropos'.
-
-The default value of the completion is the symbol at point. As a better
-alternative, you can run `embark-export' from commands like `M-x' and
-`describe-symbol'." t nil)
-
-(autoload 'consult-file-externally "consult" "\
-Open FILE externally using the default application of the system.
-
-\(fn FILE)" t nil)
-
-(autoload 'consult-multi-occur "consult" "\
-Improved version of `multi-occur' based on `completing-read-multiple'.
-
-See `multi-occur' for the meaning of the arguments BUFS, REGEXP and NLINES.
-
-\(fn BUFS REGEXP &optional NLINES)" t nil)
-
 (register-definition-prefixes "consult" '("consult-"))
 
 ;;;***
