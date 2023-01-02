@@ -11,14 +11,16 @@
 #+end_src
 ** Sysvars
 #+begin_src emacs-lisp
-(load-file "~/.emacs.d/sysvars.el")
+  (load-file "~/.emacs.d/sysvars.el")
+  (defvar lemacs/notes-directory (expand-file-name "~/Notes")
+    "Directory where org and denote files reside")
+  (setq denote-directory (expand-file-name (concat lemacs/notes-directory "/denote")))
+  (setq org-directory (expand-file-name (concat lemacs/notes-directory "/org")))
+  (setq org-agenda-files (list org-directory))
 #+end_src
 
 Example of sysvars.el
 #+begin_verse
-(setq denote-directory (expand-file-name "~/Notes/denote/"))
-(setq org-directory "~/Notes/org/")
-(setq org-agenda-files '("~/Notes/org"))
 (setq lemacs/notes-directory "~/Notes")
 (setq user-full-name "John Doe")
 #+end_verse
@@ -645,7 +647,7 @@ Example of sysvars.el
           '((sequence "TODO(t)"    ; a task
                       "PROJ(p)"    ; task made of tasks
                       "NEXT(n)"    ; next task in project
-                      "DLGT(l)"    ; delegate
+                      "DLGT(l)"    ; delegate this and \rarr WAIT
                       "IDEA(i)"    ; idea - review me
                       "STRT(s!)"   ; task started
                       "WAIT(w@/!)" ; wait for somebody 
@@ -734,8 +736,9 @@ Example of sysvars.el
 
     (add-to-list 'org-modules 'org-habit)
     (setq org-habit-show-habits-only-for-today nil)
-    (setq org-agenda-span 8
-          org-agenda-start-on-weekday nil)
+    (setq org-agenda-span 10
+          org-agenda-start-on-weekday nil
+          )
     )
 
   (use-package evil-org
