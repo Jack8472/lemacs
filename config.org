@@ -9,9 +9,11 @@
            gcs-done))
 (add-hook 'emacs-startup-hook #'efs/display-startup-time)
 #+end_src
-** Sysvars
+** Lemacs files config
 #+begin_src emacs-lisp
-  (load-file "~/.emacs.d/sysvars.el")
+  (defvar lemacs/config-dir (expand-file-name "~/.lemacs.d")
+    "Directory with systemvariables and peresistent storage")
+  (load-file (concat lemacs/config-dir "/sysvars.el"))
   (defvar lemacs/notes-directory (expand-file-name "~/Notes")
     "Directory where org and denote files reside")
   (setq denote-directory (expand-file-name (concat lemacs/notes-directory "/denote")))
@@ -52,22 +54,27 @@ Example of sysvars.el
 #+end_src
 ** Various tweaks
 #+begin_src emacs-lisp
-  (setq bookmark-default-file "~/.emacs.d/bookmarks")
+  (set-language-environment "UTF-8")
+  (when (fboundp 'native-compile-async)
+    (setq comp-deferred-compilation t))
+  (setq native-comp-async-report-warnings-errors nil)
+  (setq warning-minimum-level :error)
+  (setq bookmark-default-file (concat lemacs/config-dir "/bookmarks"))
   (auto-save-visited-mode)
   (global-auto-revert-mode)
   (add-hook 'text-mode-hook 'tildify-mode)
   (setq ispell-dictionary "polish")
   (setq use-short-answers t)
-  (recentf-mode 1)
+  (setq recentf-save-file (concat lemacs/config-dir "/recentf"))
   (setq recentf-max-menu-items 50)
   (setq recentf-max-saved-items 50)
+  (recentf-mode 1)
   (setq inhibit-startup-message t)
   (when (fboundp 'tool-bar-mode)
     (tool-bar-mode -1))
   (when (fboundp 'scroll-bar-mode)
     (scroll-bar-mode -1))
   (tooltip-mode -1)           ; Disable tooltips
-  ;(set-fringe-mode 10)        ; Give some breathing room
   (menu-bar-mode -1)            ; Disable the menu bar
   (setq visible-bell t)
   (column-number-mode)
@@ -75,17 +82,19 @@ Example of sysvars.el
   ;; Avoid entering the ~repeat-complex-cammand~ when quiting everything with ~C-x~.
   (global-unset-key (kbd "C-x <escape> <escape>")) ; repeat-complex-command
   (setq text-scale-mode-step 1.1)
+  ;; remembering the last place you visited in a file
+  (save-place-mode 1)
 #+end_src
 ** Backups
 #+begin_src emacs-lisp
 ;; Save backup files to a dedicated directory.
-(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+(setq backup-directory-alist `(("." . ,(concat lemacs/config-dir "/backups"))))
 (setq delete-old-versions -1)
 
 ;; Make numeric backup versions unconditionally.
 (setq version-control t)
 (setq vc-make-backup-files t)
-(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+(setq auto-save-file-name-transforms `((".*" ,(expand-file-name (concat lemacs/config-dir "/auto-save-list/")) t)))
 
 ;; Do not create lock files.
 (setq create-lockfiles nil)
@@ -105,32 +114,32 @@ Example of sysvars.el
 * Appearance
 ** Fonts
 #+begin_src emacs-lisp
-    (defun lemacs/setup-fonts ()
-      "Setup font faces"
-      (if (string-equal system-type "windows-nt")
-          (progn ;; Windows fonts
-            (setq lemacs/font-default "Hack")
-            (setq lemacs/font-modeline "Hack")
-            (setq lemacs/font-variable "Iosevka Aile"))
-        (progn ;; Linux fonts
-          (setq lemacs/font-default "Iosevka Fixed")
-          (setq lemacs/font-modeline "Iosevka Light")
-          (setq lemacs/font-variable "Iosevka Aile")))
-      (if (string-equal system-type "windows-nt")
-          (setq lemacs/font-size 110))  
-      (if (string-equal (system-name) "fractal")
-          (setq lemacs/font-size 128))
-      (if (string-equal (system-name) "commodus")
-          (setq lemacs/font-size 107))
-      (if (string-equal (system-name) "ludwig")
-          (setq lemacs/font-size 128))
-      (set-face-attribute 'default nil :height lemacs/font-size)
-      (set-face-attribute 'default nil :font lemacs/font-default)
-      )
-    ;; run this hook after we have initialized the first time
-    (add-hook 'after-init-hook 'lemacs/setup-fonts)
-    ;; re-run this hook if we create a new frame from daemonized Emacs
-    (add-hook 'server-after-make-frame-hook 'lemacs/setup-fonts)
+  (defun lemacs/setup-fonts ()
+    "Setup font faces"
+    (if (string-equal system-type     "windows-nt")
+        (progn ;; Windows fonts
+          (setq lemacs/font-default   "Hack")
+          (setq lemacs/font-modeline  "Hack")
+          (setq lemacs/font-variable  "Iosevka Aile"))
+      (progn ;; Linux fonts
+        (setq lemacs/font-default     "Iosevka Fixed")
+        (setq lemacs/font-modeline    "Iosevka Light")
+        (setq lemacs/font-variable    "Iosevka Aile")))
+    (if (string-equal system-type "windows-nt")
+        (setq lemacs/font-size 110))  
+    (if (string-equal (system-name) "fractal")
+        (setq lemacs/font-size 128))
+    (if (string-equal (system-name) "commodus")
+        (setq lemacs/font-size 107))
+    (if (string-equal (system-name) "ludwig")
+        (setq lemacs/font-size 128))
+    (set-face-attribute 'default nil :height lemacs/font-size)
+    (set-face-attribute 'default nil :font lemacs/font-default)
+    )
+  ;; run this hook after we have initialized the first time
+  (add-hook 'after-init-hook 'lemacs/setup-fonts)
+  ;; re-run this hook if we create a new frame from daemonized Emacs
+  (add-hook 'server-after-make-frame-hook 'lemacs/setup-fonts)
 #+end_src
 ** Themes
 #+begin_src emacs-lisp
@@ -336,7 +345,8 @@ Example of sysvars.el
 #+end_src
 * Evil tutor
 #+begin_src emacs-lisp
-(use-package evil-tutor)
+  (use-package evil-tutor
+    :defer t)
 #+end_src
 * Completion
 ** All the icons
@@ -374,48 +384,50 @@ Example of sysvars.el
 #+end_src
 ** Vertico
 #+begin_src emacs-lisp
-  (use-package vertico
-    :init
-    (vertico-mode)
-    (setq vertico-cycle nil)
-    :bind (:map vertico-map
-                (("C-j" . vertico-next)
-                 ("C-k" . vertico-previous)
-                 ("TAB" . minibuffer-complete)
-                 ("<escape>" . keyboard-escape-quit)))
-    )
+      (use-package vertico
+        :init
+        (vertico-mode)
+        (setq vertico-cycle nil)
+        :bind (:map vertico-map
+                    (("C-j" . vertico-next)
+                     ("C-k" . vertico-previous)
+                     ("TAB" . minibuffer-complete)
+                     ("<escape>" . keyboard-escape-quit)))
+        )
 
-  ;; Persist history over Emacs restarts. Vertico sorts by history position.
-  (use-package savehist
-    :init
-    (savehist-mode))
+      ;; Persist history over Emacs restarts. Vertico sorts by history position.
+      (use-package savehist
+        :init
+        (savehist-mode)
+        :config
+        (setq savehist-file (concat lemacs/config-dir "/history")))
 
-  ;; A few more useful configurations...
-  (use-package emacs
-    :init
-    ;; Add prompt indicator to `completing-read-multiple'.
-    ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
-    (defun crm-indicator (args)
-      (cons (format "[CRM%s] %s"
-                    (replace-regexp-in-string
-                     "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
-                     crm-separator)
-                    (car args))
-            (cdr args)))
-    (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+      ;; A few more useful configurations...
+      (use-package emacs
+        :init
+        ;; Add prompt indicator to `completing-read-multiple'.
+        ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+        (defun crm-indicator (args)
+          (cons (format "[CRM%s] %s"
+                        (replace-regexp-in-string
+                         "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                         crm-separator)
+                        (car args))
+                (cdr args)))
+        (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
-    ;; Do not allow the cursor in the minibuffer prompt
-    (setq minibuffer-prompt-properties
-          '(read-only t cursor-intangible t face minibuffer-prompt))
-    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+        ;; Do not allow the cursor in the minibuffer prompt
+        (setq minibuffer-prompt-properties
+              '(read-only t cursor-intangible t face minibuffer-prompt))
+        (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
-    ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-    ;; Vertico commands are hidden in normal buffers.
-    ;; (setq read-extended-command-predicate
-    ;;       #'command-completion-default-include-p)
+        ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+        ;; Vertico commands are hidden in normal buffers.
+        ;; (setq read-extended-command-predicate
+        ;;       #'command-completion-default-include-p)
 
-    ;; Enable recursive minibuffers
-    (setq enable-recursive-minibuffers t))
+        ;; Enable recursive minibuffers
+        (setq enable-recursive-minibuffers t))
 
 #+end_src
 ** Orderless
@@ -551,6 +563,11 @@ Example of sysvars.el
     ;;;; 4. locate-dominating-file
     ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
   )
+
+
+#+end_src
+** TODO Corfu
+#+begin_src emacs-lisp
   (use-package corfu
     :general
     (:keymaps 'corfu-map
@@ -563,8 +580,6 @@ Example of sysvars.el
               "M-l" #'corfu-show-location)
     :config
     (global-corfu-mode))
-
-
 #+end_src
 ** TODO Embark
 #+begin_src emacs-lisp
@@ -642,7 +657,7 @@ Example of sysvars.el
     (setq org-refile-targets '((nil :maxlevel . 9)
                                (org-agenda-files :maxlevel . 9)))
     (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
-    (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
+    (setq org-refile-use-outline-path 'file)                  ; Show full paths for refiling
     (setq org-todo-keywords
           '((sequence "TODO(t)"    ; a task
                       "PROJ(p)"    ; task made of tasks
@@ -772,8 +787,6 @@ Example of sysvars.el
 * org-modern
 #+begin_src emacs-lisp
   (use-package org-modern
-    :config
-    ;; (global-org-modern-mode)
     )
 #+end_src
 * TODO org-appear
@@ -832,7 +845,9 @@ Example of sysvars.el
 #+end_src
 * Magit
 #+begin_src emacs-lisp
-  (use-package magit)
+  (use-package magit
+    :commands (magit-status)
+    )
 #+end_src
 * Avy
 #+begin_src emacs-lisp
@@ -841,7 +856,10 @@ Example of sysvars.el
 * Yassnippet
 #+begin_src emacs-lisp
   (use-package yasnippet
-  :config (yas-global-mode t))
+  :config
+  (yas-global-mode t)
+  (setq yas-snippet-dirs (concat lemacs/config-dir "/snippets"))
+  )
 #+end_src
 * Auto package update
 #+begin_src emacs-lisp
