@@ -75,6 +75,7 @@ Example of sysvars.el
   (setq native-comp-async-report-warnings-errors nil)
   (setq warning-minimum-level :error)
   ;(setq bookmark-default-file (concat lemacs/config-dir "/bookmarks"))
+  (setq bookmark-save-flag 0)
   (global-auto-revert-mode)
   (add-hook 'text-mode-hook 'tildify-mode)
   (setq ispell-dictionary "polish")
