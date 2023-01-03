@@ -681,8 +681,13 @@ Example of sysvars.el
     (setq org-agenda-start-with-log-mode t)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
-    (setq org-refile-targets '((nil :maxlevel . 9)
-                               (org-agenda-files :maxlevel . 9)))
+    (setq org-refile-targets `(
+                               (,(concat
+                                  lemacs/notes-directory
+                                  "/org-drill.org")
+                                :maxlevel . 9)
+                               (org-agenda-files :maxlevel . 9)
+                               ))
     (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
     (setq org-refile-use-outline-path 'file)                  ; Show full paths for refiling
     (setq org-todo-keywords
@@ -923,15 +928,6 @@ This setting ensures that emacsclient always opens on *dashboard* rather than *s
   (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 #+end_src
 
-* Smartparens
-#+begin_src emacs-lisp
-  (use-package smartparens
-    :config
-    (require 'smartparens-config)
-    ;;(smartparens-global-mode)
-    ;;(show-smartparens-global-mode 1)
-    )
-#+end_src
 * Fish mode
 #+begin_src emacs-lisp
   (if (string-equal system-type "gnu/linux")
