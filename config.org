@@ -14,11 +14,6 @@
   (defvar lemacs/config-dir (expand-file-name "~/.lemacs.d")
     "Directory with systemvariables and peresistent storage")
   (load-file (concat lemacs/config-dir "/sysvars.el"))
-  (defvar lemacs/notes-directory (expand-file-name "~/Notes")
-    "Directory where org and denote files reside")
-  (setq denote-directory (expand-file-name (concat lemacs/notes-directory "/denote")))
-  (setq org-directory (expand-file-name (concat lemacs/notes-directory "/org")))
-  (setq org-agenda-files (list org-directory))
 #+end_src
 
 Example of sysvars.el
@@ -26,12 +21,6 @@ Example of sysvars.el
 (setq lemacs/notes-directory "~/Notes")
 (setq user-full-name "John Doe")
 #+end_verse
-** Custom file
-#+begin_src emacs-lisp
-  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-  (when (file-exists-p custom-file)
-                       (load-file custom-file))
-#+end_src
 ** Package
 #+begin_src emacs-lisp
   (require 'package)
@@ -52,6 +41,35 @@ Example of sysvars.el
   (setq use-package-compute-statistics t)
   (setq use-package-verbose t)
 #+end_src
+** No littering
+#+begin_src emacs-lisp
+  ;; NOTE: If you want to move everything out of the ~/.emacs.d folder
+  ;; reliably, set `user-emacs-directory` before loading no-littering!
+  (setq user-emacs-directory lemacs/config-dir)
+
+  (use-package no-littering
+    ;:disabled t
+    )
+
+  ;; no-littering doesn't set this by default so we must place
+  ;; auto save files in the same path as it uses for sessions
+  (setq auto-save-file-name-transforms
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+#+end_src
+** Custom file
+#+begin_src emacs-lisp
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (when (file-exists-p custom-file)
+                       (load-file custom-file))
+#+end_src
+** Set some paths
+#+begin_src emacs-lisp
+  (defvar lemacs/notes-directory (expand-file-name "~/Notes")
+    "Directory where org and denote files reside")
+  (setq denote-directory (expand-file-name (concat lemacs/notes-directory "/denote")))
+  (setq org-directory (expand-file-name (concat lemacs/notes-directory "/org")))
+  (setq org-agenda-files (list org-directory))
+#+end_src
 ** Various tweaks
 #+begin_src emacs-lisp
   (set-language-environment "UTF-8")
@@ -64,10 +82,10 @@ Example of sysvars.el
   (add-hook 'text-mode-hook 'tildify-mode)
   (setq ispell-dictionary "polish")
   (setq use-short-answers t)
-  ;(setq recentf-save-file (concat lemacs/config-dir "/recentf"))
+  (recentf-mode 1)
   (setq recentf-max-menu-items 50)
   (setq recentf-max-saved-items 50)
-  (recentf-mode 1)
+  (setq recentf-auto-cleanup 'never)
   (setq inhibit-startup-message t)
   (when (fboundp 'tool-bar-mode)
     (tool-bar-mode -1))
@@ -87,8 +105,8 @@ Example of sysvars.el
 ** Backups
 #+begin_src emacs-lisp
   ;; Save backup files to a dedicated directory.
-  (setq backup-directory-alist
-        `(("." . ,(concat lemacs/config-dir "/backups"))))
+  ;(setq backup-directory-alist
+  ;      `(("." . ,(concat lemacs/config-dir "/backups"))))
   (setq delete-old-versions -1)
   (auto-save-visited-mode)
   ;; Make numeric backup versions unconditionally.
@@ -567,16 +585,27 @@ Example of sysvars.el
 ** TODO Corfu
 #+begin_src emacs-lisp
   (use-package corfu
-    :general
-    (:keymaps 'corfu-map
-              :states 'insert
-              "C-j" #'corfu-next
-              "C-k" #'corfu-previous
-              "<escape>" #'corfu-quit
-              "<return>" #'corfu-insert
-              "M-d" #'corfu-show-documentation
-              "M-l" #'corfu-show-location)
-    :config
+    ;; Optional customizations
+    :custom
+    ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+    (corfu-auto t)                 ;; Enable auto completion
+    (corfu-separator ?\s)          ;; Orderless field separator
+    ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+    ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+    ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+    ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
+    ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+    ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+
+    ;; Enable Corfu only for certain modes.
+    ;; :hook ((prog-mode . corfu-mode)
+    ;;        (shell-mode . corfu-mode)
+    ;;        (eshell-mode . corfu-mode))
+
+    ;; Recommended: Enable Corfu globally.
+    ;; This is recommended since Dabbrev can be used globally (M-/).
+    ;; See also `corfu-excluded-modes'.
+    :init
     (global-corfu-mode))
 #+end_src
 ** TODO Embark
@@ -874,20 +903,17 @@ Emacs Dashboard is an extensible startup screen showing you recent files, bookma
 
 #+begin_src emacs-lisp
   (use-package dashboard
-    :init      ;; tweak dashboard config before loading it
-    (setq dashboard-set-heading-icons t)
-    (setq dashboard-set-file-icons t)
-    (setq dashboard-banner-logo-title "Yay, EVIL!")
-    (setq dashboard-startup-banner "~/.emacs.d/doom.png")  ;; use custom image as banner
-    (setq dashboard-center-content t) ;; set to 't' for centered content
-    (setq dashboard-items '(
-                            (recents . 4)
-                            (bookmarks . 4)
-                            ))
+    :custom
+    (dashboard-set-heading-icons t)
+    (dashboard-set-file-icons t)
+    (dashboard-banner-logo-title "Yay, EVIL!")
+    (dashboard-startup-banner "~/.emacs.d/doom.png")  ;; use custom image as banner
+    (dashboard-center-content t) ;; set to 't' for centered content
+    (dashboard-items '((recents . 5)(bookmarks . 5)))
     :config
     (dashboard-setup-startup-hook)
-    (dashboard-modify-heading-icons '((recents . "file-text")
-                                      (bookmarks . "book"))))
+    )
+
 #+end_src
 
 ** Dashboard in Emacsclient
@@ -965,21 +991,6 @@ This setting ensures that emacsclient always opens on *dashboard* rather than *s
 #+begin_src emacs-lisp
   (use-package rg
     :disabled t)
-#+end_src
-** TODO No littering
-#+begin_src emacs-lisp
-  ;; NOTE: If you want to move everything out of the ~/.emacs.d folder
-  ;; reliably, set `user-emacs-directory` before loading no-littering!
-  (setq user-emacs-directory lemacs/config-dir)
-
-  (use-package no-littering
-    ;:disabled t
-    )
-
-  ;; no-littering doesn't set this by default so we must place
-  ;; auto save files in the same path as it uses for sessions
-  (setq auto-save-file-name-transforms
-        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 #+end_src
 ** Command-log-mode
 #+begin_src emacs-lisp
