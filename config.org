@@ -11,9 +11,9 @@
 #+end_src
 ** Lemacs files config
 #+begin_src emacs-lisp
-  (defvar lemacs/config-dir (expand-file-name "~/.lemacs.d")
+  (defvar lemacs/config-directory (expand-file-name "~/.lemacs.d")
     "Directory with systemvariables and peresistent storage")
-  (load-file (concat lemacs/config-dir "/sysvars.el"))
+  (load-file (concat lemacs/config-directory "/sysvars.el"))
 #+end_src
 
 Example of sysvars.el
@@ -45,7 +45,7 @@ Example of sysvars.el
 #+begin_src emacs-lisp
   ;; NOTE: If you want to move everything out of the ~/.emacs.d folder
   ;; reliably, set `user-emacs-directory` before loading no-littering!
-  (setq user-emacs-directory lemacs/config-dir)
+  (setq user-emacs-directory lemacs/config-directory)
   (use-package no-littering
     )
   ;; no-littering doesn't set this by default so we must place
@@ -75,7 +75,7 @@ Example of sysvars.el
     (setq comp-deferred-compilation t))
   (setq native-comp-async-report-warnings-errors nil)
   (setq warning-minimum-level :error)
-  ;(setq bookmark-default-file (concat lemacs/config-dir "/bookmarks"))
+  ;(setq bookmark-default-file (concat lemacs/config-directory "/bookmarks"))
   (setq bookmark-save-flag 0)
   (global-auto-revert-mode)
   (add-hook 'text-mode-hook 'tildify-mode)
@@ -104,8 +104,6 @@ Example of sysvars.el
 ** Backups
 #+begin_src emacs-lisp
   ;; Save backup files to a dedicated directory.
-  ;(setq backup-directory-alist
-  ;      `(("." . ,(concat lemacs/config-dir "/backups"))))
   (setq delete-old-versions -1)
   (auto-save-visited-mode)
   ;; Make numeric backup versions unconditionally.
