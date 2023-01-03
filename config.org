@@ -726,7 +726,7 @@ Example of sysvars.el
              (file "inbox.org")
              "* TODO %^{Title}\n SCHEDULED: %^t\n :PROPERTIES:\n :CAPTURED: %U\n :END:\n %?" :empty-lines 1)
             ("r" "Org-drill" entry
-             (file+headline "org-drill.org" "Inbox")
+             (file "inbox.org")
              "* %^  :drill:\n%^ \n** Answer \n%^")
             )
           )
@@ -885,12 +885,11 @@ Example of sysvars.el
 #+begin_src emacs-lisp
   (use-package avy)
 #+end_src
-* Yassnippet
+* TODO Yassnippet
 #+begin_src emacs-lisp
   (use-package yasnippet
   :config
   (yas-global-mode t)
-  ;(setq yas-snippet-dirs (concat lemacs/config-dir "/snippets"))
   )
 #+end_src
 * Auto package update
@@ -902,10 +901,6 @@ Example of sysvars.el
 #+end_src
 
 * DASHBOARD
-Emacs Dashboard is an extensible startup screen showing you recent files, bookmarks, agenda items and an Emacs banner.
-
-** Configuring Dashboard
-
 #+begin_src emacs-lisp
   (use-package dashboard
     :custom
@@ -917,15 +912,9 @@ Emacs Dashboard is an extensible startup screen showing you recent files, bookma
     (dashboard-items '((recents . 5)(bookmarks . 5)))
     :config
     (dashboard-setup-startup-hook)
+    ;; dashboard in emacsclient
+    (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
     )
-
-#+end_src
-
-** Dashboard in Emacsclient
-This setting ensures that emacsclient always opens on *dashboard* rather than *scratch*.
-
-#+begin_src emacs-lisp
-  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 #+end_src
 
 * Fish mode
@@ -934,7 +923,8 @@ This setting ensures that emacsclient always opens on *dashboard* rather than *s
     (use-package fish-mode))
 #+end_src
 * Functions
-** Notes search function
+** TODO Notes search function
+doesnt work on windows?
 #+begin_src emacs-lisp
   (defun lemacs/consult-ripgrep-notes-directory ()
     (interactive)
