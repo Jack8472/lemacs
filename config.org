@@ -197,6 +197,10 @@ Example of sysvars.el
     "SPC" '(execute-extended-command :which-key "M-x")
     "c" 'org-capture
     "e" 'eval-last-sexp
+    "y" '(:ignore t :which-key "yasnippet")
+    "y y" 'yas-insert-snippet
+    "y n" 'yas-new-snippet
+    "y n" 'yas-visit-snippet-file
 
     "b" '(:ignore t :which-key "buffer")
     "RET" 'consult-bookmark
@@ -215,6 +219,7 @@ Example of sysvars.el
     "f f" 'find-file
     "f r" 'consult-recent-file
     "f s" 'save-buffer
+    "f l" 'consult-locate
 
     "g" '(:ignore t :which-key "git")
     "g g" 'magit-status
