@@ -140,7 +140,7 @@ Example of sysvars.el
     (if (string-equal system-type "windows-nt")
         (setq lemacs/font-size 110))  
     (if (string-equal (system-name) "fractal")
-        (setq lemacs/font-size 128))
+        (setq lemacs/font-size 144))
     (if (string-equal (system-name) "commodus")
         (setq lemacs/font-size 107))
     (if (string-equal (system-name) "ludwig")
@@ -185,7 +185,8 @@ Example of sysvars.el
       :prefix "SPC"
       :non-normal-prefix "M-SPC")
     (general-create-definer lemacs/local-leader-key
-      :keymaps '(normal insert visual emacs motion)
+      :keymaps 'override
+      :states '(insert emacs normal visual hybrid emacs motion operator)
       :prefix "SPC m"
       :global-prefix "M-SPC m")
 #+end_src
@@ -736,7 +737,7 @@ Example of sysvars.el
             )
           )
     ;; Save Org buffers after refiling!
-    (advice-add 'org-refile :after 'org-save-all-org-buffers)
+    (advice-add 'org-refile :after 'org-save-all-org-buffers) ; TODO
 
     (setq org-agenda-sorting-strategy '(
                                         (agenda habit-down time-up todo-state-down deadline-up priority-down)
@@ -754,8 +755,8 @@ Example of sysvars.el
                                      (todo . " %i %-12:c")
                                      (tags . " %i %-12:c")
                                      (search . " %i %-12:c")))
-    (setq org-columns-default-format-for-agenda "%10ITEM %TODO %3PRIORITY %TAGS") ;; TODO
-    ;; This needs to be loaded before sysvars.el
+    (setq org-columns-default-format-for-agenda "%20ITEM %TODO %1PRIORITY %5Effort(Effort){:} %5CLOCKSUM %TAGS")
+    
     (defun lemacs/agenda-icon-material (name)
       "Returns an all-the-icons-material icon"
       (list (all-the-icons-material name)))
@@ -765,7 +766,7 @@ Example of sysvars.el
         ("Pesonal" ,(lemacs/agenda-icon-material "home") nil nil :ascent center)
         ("Work" ,(lemacs/agenda-icon-material "work") nil nil :ascent center)
         ("inbox" ,(lemacs/agenda-icon-material "inbox") nil nil :ascent center)
-        ) "Modify me in sysvars.el")
+        ) "Modify me in user-icons.el")
 
     (setq org-hide-emphasis-markers nil)
     (setq org-log-into-drawer t)
