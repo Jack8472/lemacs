@@ -282,6 +282,7 @@ Example of sysvars.el
     "t" 'org-todo 
     "r" 'org-agenda-refile
     "m" (general-key "C-c")
+    "c" 'org-agenda-columns
   )
 #+end_src
 *** Org-mode
@@ -755,7 +756,7 @@ Example of sysvars.el
                                      (todo . " %i %-12:c")
                                      (tags . " %i %-12:c")
                                      (search . " %i %-12:c")))
-    (setq org-columns-default-format-for-agenda "%20ITEM %TODO %1PRIORITY %5Effort(Effort){:} %5CLOCKSUM %TAGS")
+    (setq org-columns-default-format-for-agenda "%20ITEM %TODO %1PRIORITY %4Effort(Effort){:} %4CLOCKSUM")
     
     (defun lemacs/agenda-icon-material (name)
       "Returns an all-the-icons-material icon"
