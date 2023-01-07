@@ -283,6 +283,7 @@ Example of sysvars.el
     "r" 'org-agenda-refile
     "m" (general-key "C-c")
     "c" 'org-agenda-columns
+    "f" 'org-agenda-set-effort
   )
 #+end_src
 *** Org-mode
@@ -293,6 +294,7 @@ Example of sysvars.el
     "t" 'org-todo 
     "c" 'org-toggle-checkbox 
     "e" 'org-export-dispatch
+    "f" 'org-set-effort
     "r" 'org-refile
     "R" 'org-refile-copy
     "m" (general-key "C-c")
@@ -685,6 +687,7 @@ Example of sysvars.el
     (if (string-equal system-type "gnu/linux")
         (setq org-ellipsis " ▾"))
     (setq org-agenda-start-with-log-mode t)
+    (setq org-agenda-tags-column 60)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
     (setq org-refile-targets `(
@@ -757,7 +760,7 @@ Example of sysvars.el
                                      (tags . " %i %-12:c")
                                      (search . " %i %-12:c")))
     (setq org-columns-default-format-for-agenda "%20ITEM %TODO %1PRIORITY %4Effort(Effort){:} %4CLOCKSUM")
-    
+
     (defun lemacs/agenda-icon-material (name)
       "Returns an all-the-icons-material icon"
       (list (all-the-icons-material name)))
