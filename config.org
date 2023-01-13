@@ -725,16 +725,18 @@ Example of sysvars.el
             ("t" "Today" entry
              (file "inbox.org")
              "* TODO %^{Title}\n SCHEDULED: %t\n :PROPERTIES:\n :CAPTURED: %U\n :END:\n"
-             :empty-lines 1
+             :kill-buffer t)
+            ("i" "Idea" entry
+             (file "inbox.org")
+             "* IDEA %^{Title}\n :PROPERTIES:\n :CAPTURED: %U\n :END:\n"
              :kill-buffer t)
             ("s" "Schedule…" entry
              (file "inbox.org")
              "* TODO %^{Title}\n SCHEDULED: %^t\n :PROPERTIES:\n :CAPTURED: %U\n :END:\n"
-             :empty-lines 1
              :kill-buffer t)
             ("e" "Editable…" entry
              (file "inbox.org")
-             "* TODO %^{Title}\n :PROPERTIES:\n :CAPTURED: %U\n :END:\n %?" :empty-lines 1)
+             "* TODO %^{Title}\n :PROPERTIES:\n :CAPTURED: %U\n :END:\n %?")
             ("r" "Org-drill" entry
              (file "inbox.org")
              "* %^  :drill:\n%^ \n** Answer \n%^")
