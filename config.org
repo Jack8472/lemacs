@@ -930,6 +930,19 @@ Example of sysvars.el
   (if (string-equal system-type "gnu/linux")
     (use-package fish-mode))
 #+end_src
+* Hl-todo
+#+begin_src emacs-lisp
+  (use-package hl-todo
+    :defer 5
+    :config
+    (global-hl-todo-mode t)
+    (setq hl-todo-keyword-faces
+      '(("TODO"       . "#FF0000")
+        ("FIXME"      . "#FF0000")
+        ("IMPORTANT"  . "#A020F0")
+        ))
+    )
+#+end_src
 * Functions
 ** TODO Notes search function
 doesnt work on windows?
