@@ -739,7 +739,7 @@ Example of sysvars.el
              "* TODO %^{Title}\n :PROPERTIES:\n :CAPTURED: %U\n :END:\n %?")
             ("r" "Org-drill" entry
              (file "inbox.org")
-             "* %^  :drill:\n%^ \n** Answer \n%^")
+             "* %^  :drill:\n \n** Answer \n")
             )
           )
     ;; Save Org buffers after refiling!
@@ -964,7 +964,7 @@ doesnt work on windows?
                     ;; Also handle undocumented (<active> <inactive>) form.
                     ((numberp (cadr alpha)) (cadr alpha)))
               100)
-         '(93 . 50) '(100 . 100)))))
+         '(80 . 50) '(100 . 100)))))
 #+end_src
 ** Kill all buffers
 #+begin_src emacs-lisp
