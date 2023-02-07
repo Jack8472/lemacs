@@ -721,16 +721,21 @@ Example of sysvars.el
             ("KILL" . (:foreground "white" :background "red"))
             ("HOLD" . (:foreground "black" :background "gray"))
             ))
+    (setq lemacs/org-drill-file (concat
+                                  lemacs/notes-directory
+                                  "/org-drill.org"))
     (setq org-capture-templates
-          '(
+          `(
             ("t" "Today" entry
              (file "inbox.org")
              "* TODO %^{Title}\n DEADLINE: %t\n :PROPERTIES:\n :CAPTURED: %U\n :END:\n"
-             :kill-buffer t)
+             :kill-buffer t
+             :immediate-finish t)
             ("i" "Idea" entry
              (file "inbox.org")
              "* IDEA %^{Title}\n :PROPERTIES:\n :CAPTURED: %U\n :END:\n"
-             :kill-buffer t)
+             :kill-buffer t
+             :immediate-finish t)
             ("s" "Schedule…" entry
              (file "inbox.org")
              "* TODO %^{Title}\n SCHEDULED: %^t\n :PROPERTIES:\n :CAPTURED: %U\n :END:\n"
@@ -739,11 +744,8 @@ Example of sysvars.el
              (file "inbox.org")
              "* TODO %^{Title}\n DEADLINE: %^t\n :PROPERTIES:\n :CAPTURED: %U\n :END:\n"
              :kill-buffer t)
-            ("e" "Editable…" entry
-             (file "inbox.org")
-             "* TODO %^{Title}\n :PROPERTIES:\n :CAPTURED: %U\n :END:\n %?")
             ("r" "Org-drill" entry
-             (file "inbox.org")
+             (file+headline ,lemacs/org-drill-file "Inbox")
              "* %^  :drill:\n \n** Answer \n")
             )
           )
@@ -846,29 +848,29 @@ Example of sysvars.el
 #+end_src
 * TODO org-brain
 #+begin_src emacs-lisp
-(use-package org-brain
-  :init
-  (setq org-brain-path brain-directory)
-  ;; For Evil users
-  (with-eval-after-load 'evil
-    (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
-  :config
-  (bind-key "C-c b" 'org-brain-prefix-map org-mode-map)
-  (setq org-id-track-globally t)
-  (setq org-id-locations-file "~/.emacs.d/.org-id-locations")
-  (add-hook 'before-save-hook #'org-brain-ensure-ids-in-buffer)
-  (push '("b" "Brain" plain (function org-brain-goto-end)
-          "* %i%?" :empty-lines 1)
-        org-capture-templates)
-  (setq org-brain-visualize-default-choices 'all)
-  (setq org-brain-title-max-length 12)
-  (setq org-brain-include-file-entries nil
-        org-brain-file-entries-use-title nil))
+  ;; (use-package org-brain
+  ;;   :init
+  ;;   (setq org-brain-path brain-directory)
+  ;;   ;; For Evil users
+  ;;   (with-eval-after-load 'evil
+  ;;     (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
+  ;;   :config
+  ;;   (bind-key "C-c b" 'org-brain-prefix-map org-mode-map)
+  ;;   (setq org-id-track-globally t)
+  ;;   (setq org-id-locations-file "~/.emacs.d/.org-id-locations")
+  ;;   (add-hook 'before-save-hook #'org-brain-ensure-ids-in-buffer)
+  ;;   (push '("b" "Brain" plain (function org-brain-goto-end)
+  ;;           "* %i%?" :empty-lines 1)
+  ;;         org-capture-templates)
+  ;;   (setq org-brain-visualize-default-choices 'all)
+  ;;   (setq org-brain-title-max-length 12)
+  ;;   (setq org-brain-include-file-entries nil
+  ;;         org-brain-file-entries-use-title nil))
 
-;; Allows you to edit entries directly from org-brain-visualize
-(use-package polymode
-  :config
-  (add-hook 'org-brain-visualize-mode-hook #'org-brain-polymode))
+  ;; Allows you to edit entries directly from org-brain-visualize
+  ;; (use-package polymode
+  ;;   :config
+  ;;   (add-hook 'org-brain-visualize-mode-hook #'org-brain-polymode))
 #+end_src
 * TODO org-roam
 * mixed-pitch
