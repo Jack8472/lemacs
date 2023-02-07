@@ -1,0 +1,2 @@
+;;; Generated package description from langtool.el  -*- no-byte-compile: t -*-
+(define-package "langtool" "20230207.317" "Grammar check utility using LanguageTool" '((emacs "24.3")) :commit "02f55e8d8be83a6f9465ec49c2a6728b16ae80d3" :authors '(("Masahiro Hayashi" . "mhayashi1120@gmail.com")) :maintainer '("Masahiro Hayashi" . "mhayashi1120@gmail.com") :keywords '("docs") :url "https://github.com/mhayashi1120/Emacs-langtool")
