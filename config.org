@@ -135,15 +135,15 @@ Example of sysvars.el
           (setq lemacs/font-modeline  "Hack")
           (setq lemacs/font-variable  "Iosevka Aile"))
       (progn ;; Linux fonts
-        (setq lemacs/font-default     "Iosevka Fixed")
-        (setq lemacs/font-modeline    "Iosevka Light")
-        (setq lemacs/font-variable    "Iosevka Aile")))
+        (setq lemacs/font-default     "DejaVu Sans Mono")
+        (setq lemacs/font-modeline    "DejaVu Sans Condensed")
+        (setq lemacs/font-variable    "Source Sans Pro")))
     (if (string-equal system-type "windows-nt")
         (setq lemacs/font-size 110))  
     (if (string-equal (system-name) "fractal")
         (setq lemacs/font-size 144))
     (if (string-equal (system-name) "commodus")
-        (setq lemacs/font-size 107))
+        (setq lemacs/font-size 124))
     (if (string-equal (system-name) "ludwig")
         (setq lemacs/font-size 128))
     (set-face-attribute 'default nil :height lemacs/font-size)
@@ -336,6 +336,14 @@ Example of sysvars.el
 #+begin_src emacs-lisp
 )
 #+end_src
+* Unfo-fu
+#+begin_src emacs-lisp
+(use-package undo-fu
+  :config
+  (global-unset-key (kbd "C-z"))
+  (global-set-key (kbd "C-z")   'undo-fu-only-undo)
+  (global-set-key (kbd "C-S-z") 'undo-fu-only-redo))
+#+end_src
 * Evil
 #+begin_src emacs-lisp
   (use-package evil
@@ -344,6 +352,7 @@ Example of sysvars.el
     (setq evil-want-keybinding nil)
     (setq evil-want-C-u-scroll t)
     (setq evil-want-C-i-jump nil)
+    (setq evil-undo-system 'undo-fu)
     :config
     (evil-mode 1)
     (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
@@ -873,12 +882,26 @@ Example of sysvars.el
   ;;   (add-hook 'org-brain-visualize-mode-hook #'org-brain-polymode))
 #+end_src
 * TODO org-roam
+* TODO org-mind-map
+#+begin_src emacs-lisp
+  ;; (use-package org-mind-map)
+#+end_src
 * mixed-pitch
 #+begin_src emacs-lisp
   (use-package mixed-pitch
     :hook
     ;; If you want it in all text modes:
     (text-mode . mixed-pitch-mode))
+#+end_src
+* evil-nerd-commenter
+#+begin_src emacs-lisp
+(use-package evil-nerd-commenter
+  :config
+  (evilnc-default-hotkeys) ;; default keybinding
+  (define-key evil-motion-state-map "gc" 'evilnc-comment-operator) ; same as doom-emacs
+  (define-key evil-motion-state-map "gb" 'evilnc-copy-and-comment-operator)
+  (define-key evil-motion-state-map "gy" 'evilnc-yank-and-comment-operator)
+  )
 #+end_src
 * language-tool
 #+begin_src emacs-lisp
