@@ -243,6 +243,7 @@ Example of sysvars.el
     "n l" 'denote-link-or-create
     "n n" 'denote
     "n o" 'denote-open-or-create
+    "n d" 'denote-date
     "n s" '(lemacs/consult-ripgrep-notes-directory :which-key "search")
     "n f" 'consult-notes
     "n m" 'list-denotes
