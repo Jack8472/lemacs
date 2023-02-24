@@ -700,7 +700,7 @@ Example of sysvars.el
     (setq denote-date-prompt-use-org-read-date t)
     )
 
-  (add-to-list 'load-path "~/.emacs.d/git/denote-menu/")
+  (add-to-list 'load-path "~/.emacs.d/denote-menu/")
   (require 'denote-menu)
   (define-key denote-menu-mode-map (kbd "c") #'denote-menu-clear-filters)
   (define-key denote-menu-mode-map (kbd "/ r") #'denote-menu-filter)
@@ -1048,4 +1048,14 @@ doesnt work on windows?
   (use-package command-log-mode
     :disabled t
     :commands command-log-mode)
+#+end_src
+
+* Denote-menu
+#+begin_src emacs-lisp
+  (add-to-list 'load-path "~/.emacs.d/denote-menu/")
+  (require 'denote-menu)
+  (define-key denote-menu-mode-map (kbd "c") #'denote-menu-clear-filters)
+  (define-key denote-menu-mode-map (kbd "/ r") #'denote-menu-filter)
+  (define-key denote-menu-mode-map (kbd "/ k") #'denote-menu-filter-by-keyword)
+  (define-key denote-menu-mode-map (kbd "e") #'denote-menu-export-to-dired)
 #+end_src
