@@ -244,6 +244,8 @@ Example of sysvars.el
     "n n" 'denote
     "n o" 'denote-open-or-create
     "n s" '(lemacs/consult-ripgrep-notes-directory :which-key "search")
+    "n f" 'consult-notes
+    "n m" 'list-denotes
 
     "o" '(:ignore t :which-key "open")
     "o a" 'org-agenda
@@ -600,6 +602,19 @@ Example of sysvars.el
 
 
 #+end_src
+** Consult-notes
+#+begin_src emacs-lisp
+  (use-package consult-notes
+    :commands (consult-notes
+               consult-notes-search-in-all-notes
+               )
+    :config
+    (setq consult-notes-file-dir-sources
+          `(("Org"         ?o ,org-directory)
+            ("Denote"      ?d ,denote-directory)))
+    (when (locate-library "denote")
+      (consult-notes-denote-mode)))
+#+end_src
 ** TODO Corfu
 #+begin_src emacs-lisp
   (use-package corfu
@@ -687,6 +702,10 @@ Example of sysvars.el
 
   (add-to-list 'load-path "~/.emacs.d/git/denote-menu/")
   (require 'denote-menu)
+  (define-key denote-menu-mode-map (kbd "c") #'denote-menu-clear-filters)
+  (define-key denote-menu-mode-map (kbd "/ r") #'denote-menu-filter)
+  (define-key denote-menu-mode-map (kbd "/ k") #'denote-menu-filter-by-keyword)
+  (define-key denote-menu-mode-map (kbd "e") #'denote-menu-export-to-dired)
 #+end_src
 * org-mode
 #+begin_src emacs-lisp
