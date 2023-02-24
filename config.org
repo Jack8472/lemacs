@@ -684,9 +684,9 @@ Example of sysvars.el
     (setq denote-known-keywords '("spotkanie" "szkolenie" "osoba" "log" "metanote"))
     (setq denote-date-prompt-use-org-read-date t)
     )
-  ;; (use-package denote-menu
-  ;;   :straight (:host github :repo "namilus/denote-menu")
-  ;;   )
+
+  (add-to-list 'load-path "~/.emacs.d/git/denote-menu/")
+  (require 'denote-menu)
 #+end_src
 * org-mode
 #+begin_src emacs-lisp
