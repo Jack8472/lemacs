@@ -193,67 +193,68 @@ Example of sysvars.el
 #+end_src
 ** Global leader
 #+begin_src emacs-lisp
-  (lemacs/global-leader-key
-    ;; Varia
-    "." 'embark-act
-    "SPC" '(execute-extended-command :which-key "M-x")
-    "c" 'org-capture
-    "e" 'eval-last-sexp
+   (lemacs/global-leader-key
+     ;; Varia
+     "." 'embark-act
+     "SPC" '(execute-extended-command :which-key "M-x")
+     "c" 'org-capture
+     "e" 'eval-last-sexp
 
-    "b" '(:ignore t :which-key "buffer")
-    "RET" 'consult-bookmark
-    "`" 'previous-buffer
-    "1" 'next-buffer
-    "b b" 'consult-buffer
-    "b i" 'ibuffer
-    "b k" 'kill-current-buffer
-    "b K" 'lemacs/nuke-all-buffers
+     "b" '(:ignore t :which-key "buffer")
+     "RET" 'consult-bookmark
+     "`" 'previous-buffer
+     "1" 'next-buffer
+     "b b" 'consult-buffer
+     "b i" 'ibuffer
+     "b k" 'kill-current-buffer
+     "b K" 'lemacs/nuke-all-buffers
 
-    "f" '(:ignore t :which-key "file")
-    "f c" '((lambda () (interactive)
-              (find-file (expand-file-name "~/.emacs.d/config.org") ))
-            :which-key "edit init.el")
-    "f d" 'dired
-    "f f" 'find-file
-    "f r" 'consult-recent-file
-    "f s" 'save-buffer
-    "f l" 'consult-locate
+     "f" '(:ignore t :which-key "file")
+     "f c" '((lambda () (interactive)
+               (find-file (expand-file-name "~/.emacs.d/config.org") ))
+             :which-key "edit init.el")
+     "f d" 'dired
+     "f D" 'delete-file-and-buffer
+     "f f" 'find-file
+     "f r" 'consult-recent-file
+     "f s" 'save-buffer
+     "f l" 'consult-locate
 
-    "h" '(:ignore t :which-key "help")
-    "h r" '((lambda () (interactive)
-              (load-file "~/.emacs.d/init.el"))
-            :which-key "Reload emacs config")
-    "h d" 'dashboard-refresh-buffer
+     "h" '(:ignore t :which-key "help")
+     "h r" '((lambda () (interactive)
+               (load-file "~/.emacs.d/init.el"))
+             :which-key "Reload emacs config")
+     "h d" 'dashboard-refresh-buffer
 
-    "o" '(:ignore t
-                  :which-key "open")
-    "o a" 'org-agenda
+     "o" '(:ignore t
+                   :which-key "open")
+     "o a" 'org-agenda
 
-    "q" '(:ignore t :which-key "quit")
-    "q q" 'evil-save-and-quit
+     "q" '(:ignore t :which-key "quit")
+     "q q" 'evil-save-and-quit
 
-    "s" '(:ignore t :which-key "search")
-    "s s" 'consult-line
-    "s g" 'consult-grep
-    "s r" 'consult-ripgrep
+     "s" '(:ignore t :which-key "search")
+     "s s" 'consult-line
+     "s g" 'consult-grep
+     "s r" 'consult-ripgrep
 
-    "t" '(:ignore t :which-key "toggle")
-    "t a" 'toggle-transparency
-    "t l" 'display-line-numbers-mode 
-    "t t" '(consult-theme :which-key "choose theme")
-    "t p" 'org-toggle-pretty-entities
-    "t w" 'visual-line-mode
-    "t c" 'visual-fill-column-mode
+     "t" '(:ignore t :which-key "toggle")
+     "t a" 'toggle-transparency
+     "t l" 'display-line-numbers-mode 
+     "t t" '(consult-theme :which-key "choose theme")
+     "t p" 'org-toggle-pretty-entities
+     "t w" 'visual-line-mode
+     "t c" 'visual-fill-column-mode
 
-    "w" '(:ignore t :which-key "window")
-    "w k" 'quit-window
-    "w d" 'delete-window
-    "w m" 'delete-other-windows
-    "w o" 'other-window
-    "w w" 'other-window
-    "w r" 'split-window-right
-    "w b" 'split-window-below
- )
+     "w" '(:ignore t :which-key "window")
+     "w k" 'quit-window
+     "w d" 'delete-window
+     "w m" 'delete-other-windows
+     "w o" 'other-window
+     "w w" 'other-window
+     "w r" 'split-window-right
+     "w b" 'split-window-below
+  )
 #+end_src
 * Dired
 #+begin_src emacs-lisp
@@ -993,6 +994,20 @@ doesnt work on windows?
       (delete-other-windows)
       (dashboard-refresh-buffer)
       )
+#+end_src
+** Delete file and kill buffer
+#+begin_src emacs-lisp
+(defun delete-file-and-buffer ()
+  "Kill the current buffer and deletes the file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if filename
+        (if (y-or-n-p (concat "Do you really want to delete file " filename " ?"))
+            (progn
+              (delete-file filename)
+              (message "Deleted file %s." filename)
+              (kill-buffer)))
+      (message "Not a file visiting buffer!"))))
 #+end_src
 * Denote-menu
 #+begin_src emacs-lisp
