@@ -259,7 +259,7 @@ Example of sysvars.el
 *** Org-agenda
 #+begin_src emacs-lisp
   (lemacs/local-leader-key
-    :states '(motion normal)
+    :states 'motion 
     :keymaps 'org-agenda-mode-map
     "t" 'org-todo 
     "r" 'org-agenda-refile
