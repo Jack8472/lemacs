@@ -182,12 +182,12 @@ Example of sysvars.el
     (general-auto-unbind-keys)
     (general-create-definer lemacs/global-leader-key
       :keymaps 'override
-      :states '(insert emacs normal visual hybrid emacs motion operator)
+      :states '(normal insert emacs emacs motion)
       :prefix "SPC"
-      :non-normal-prefix "M-SPC")
+      :global-prefix "M-SPC")
     (general-create-definer lemacs/local-leader-key
       :keymaps 'override
-      :states '(insert emacs normal visual hybrid emacs motion operator)
+      :states '(normal insert emacs emacs motion)
       :prefix "SPC m"
       :global-prefix "M-SPC m")
 #+end_src
@@ -236,7 +236,7 @@ Example of sysvars.el
     "h s" 'helpful-symbol
     "h b" 'helpful-key
 
-    "m" '(:ignore t :which-key "local leader")
+    ;; "m" '(:ignore t :which-key "local leader")
 
     "n" '(:ignore t :which-key "note")
     "n b" 'denote-link-show-backlinks-buffer
@@ -293,7 +293,6 @@ Example of sysvars.el
 *** Org-mode
 #+begin_src emacs-lisp
   (lemacs/local-leader-key
-    :states 'normal
     :keymaps 'org-mode-map
     "t" 'org-todo 
     "c" 'org-toggle-checkbox 
