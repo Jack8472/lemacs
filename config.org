@@ -202,7 +202,7 @@ Example of sysvars.el
     "y" '(:ignore t :which-key "yasnippet")
     "y y" 'yas-insert-snippet
     "y n" 'yas-new-snippet
-    "y n" 'yas-visit-snippet-file
+    "y v" 'yas-visit-snippet-file
 
     "b" '(:ignore t :which-key "buffer")
     "RET" 'consult-bookmark
@@ -309,13 +309,6 @@ Example of sysvars.el
     :states 'motion
     :keymaps 'org-agenda-mode-map
     "z" 'org-agenda-view-mode-dispatch
-    )
-#+end_src
-** Avy
-#+begin_src emacs-lisp
-  (general-define-key
-    :states '(motion normal)
-    "gs" 'avy-goto-char-2
     )
 #+end_src
 ** Org-mode
@@ -935,7 +928,14 @@ Example of sysvars.el
 #+end_src
 * Avy
 #+begin_src emacs-lisp
-  (use-package avy)
+  (use-package avy
+    :general
+    (general-define-key
+     :keymaps 'override
+     :states '(motion normal)
+     "gs" 'avy-goto-char-2
+    )
+  )
 #+end_src
 * Yassnippet
 #+begin_src emacs-lisp
