@@ -181,12 +181,12 @@ Example of sysvars.el
     (general-auto-unbind-keys)
     (general-create-definer lemacs/global-leader-key
       :keymaps 'override
-      :states '(normal insert emacs emacs motion)
+      :states '(normal insert emacs motion)
       :prefix "SPC"
       :global-prefix "M-SPC")
     (general-create-definer lemacs/local-leader-key
       :keymaps 'override
-      :states '(normal insert emacs emacs motion)
+      :states '(normal insert emacs motion)
       :prefix "SPC m"
       :global-prefix "M-SPC m")
     )
@@ -255,55 +255,16 @@ Example of sysvars.el
     "w b" 'split-window-below
  )
 #+end_src
-** Local leader
-*** Org-agenda
+* Dired
 #+begin_src emacs-lisp
-  (lemacs/local-leader-key
-    :states 'motion 
-    :keymaps 'org-agenda-mode-map
-    "t" 'org-todo 
-    "r" 'org-agenda-refile
-    "m" (general-key "C-c")
-    "c" 'org-agenda-columns
-    "f" 'org-agenda-set-effort
-  )
-#+end_src
-*** Org-mode
-#+begin_src emacs-lisp
-  (lemacs/local-leader-key
-    :keymaps 'org-mode-map
-    "t" 'org-todo 
-    "c" 'org-toggle-checkbox 
-    "e" 'org-export-dispatch
-    "f" 'org-set-effort
-    "r" 'org-refile
-    "R" 'org-refile-copy
-    "m" (general-key "C-c")
-  )
-#+end_src
-** Org-agenda
-#+begin_src emacs-lisp
+  (use-package dired
+    :ensure nil
+    :general
   (general-define-key
-    :states 'motion
-    :keymaps 'org-agenda-mode-map
-    "z" 'org-agenda-view-mode-dispatch
-    )
-#+end_src
-** Org-mode
-#+begin_src emacs-lisp
-  (general-define-key
-      :states 'normal
-      :keymaps 'org-mode-map
-      "z i" 'org-toggle-inline-images
-      "z n" 'org-tree-to-indirect-buffer
-      )
-#+end_src
-** Dired
-#+begin_src emacs-lisp
-      (general-define-key
-       :states 'normal
-       :keymaps 'dired-mode-map
-       "h" 'dired-up-directory)
+   :states 'normal
+   :keymaps 'dired-mode-map
+   "h" 'dired-up-directory)
+  )
 #+end_src
 * Unfo-fu
 #+begin_src emacs-lisp
@@ -669,9 +630,42 @@ Example of sysvars.el
 * org-mode
 #+begin_src emacs-lisp
   (use-package org
-    :pin org
-    :commands (org-capture org-agenda)
+    :ensure nil
+    ;; :commands (org-capture org-agenda)
     :hook (org-mode . visual-line-mode)
+
+    :general
+    (lemacs/local-leader-key
+      :keymaps 'org-mode-map
+      "t" 'org-todo 
+      "c" 'org-toggle-checkbox 
+      "e" 'org-export-dispatch
+      "f" 'org-set-effort
+      "r" 'org-refile
+      "R" 'org-refile-copy
+      "m" (general-key "C-c")
+      )
+    (lemacs/local-leader-key
+      :states 'motion 
+      :keymaps '(org-agenda-mode-map override)
+      "t" 'org-agenda-todo 
+      "r" 'org-agenda-refile
+      "m" (general-key "C-c")
+      "c" 'org-agenda-columns
+      "f" 'org-agenda-set-effort
+      )
+    (general-define-key
+     :states 'normal
+     :keymaps 'org-mode-map
+     "z i" 'org-toggle-inline-images
+     "z n" 'org-tree-to-indirect-buffer
+     )
+    (general-define-key
+     :states 'motion
+     :keymaps 'org-agenda-mode-map
+     "z" 'org-agenda-view-mode-dispatch
+     )
+
     :config
     (setq org-confirm-babel-evaluate nil
           org-indirect-buffer-display 'current-window)
@@ -689,8 +683,8 @@ Example of sysvars.el
                                 :maxlevel . 9)
                                (org-agenda-files :maxlevel . 9)
                                ))
-    (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
-    (setq org-refile-use-outline-path 'file)                  ; Show full paths for refiling
+    (setq org-outline-path-complete-in-steps nil)      ; Refile in a single go
+    (setq org-refile-use-outline-path 'file)           ; Show full paths for refiling
     (setq org-todo-keywords
           '((sequence "TODO(t)"    ; a task
                       "PROJ(p)"    ; task made of tasks
@@ -713,8 +707,8 @@ Example of sysvars.el
             ("HOLD" . (:foreground "black" :background "gray"))
             ))
     (setq lemacs/org-drill-file (concat
-                                  lemacs/notes-directory
-                                  "/org-drill.org"))
+                                 lemacs/notes-directory
+                                 "/org-drill.org"))
     (setq org-capture-templates
           `(
             ("t" "Today" entry
@@ -796,13 +790,6 @@ Example of sysvars.el
           )
     )
 
-  (use-package evil-org
-    :after org
-    :hook (org-mode . (lambda () evil-org-mode))
-    :config
-    (require 'evil-org-agenda)
-    (evil-org-agenda-set-keys))
-
   (with-eval-after-load 'org
     (org-babel-do-load-languages
      'org-babel-load-languages
@@ -827,6 +814,15 @@ Example of sysvars.el
   (use-package org-appear
     :config
     (add-hook 'org-mode-hook 'org-appear-mode))
+#+end_src
+* evil-org
+#+begin_src emacs-lisp
+  (use-package evil-org
+    :after org
+    :hook (org-mode . (lambda () evil-org-mode))
+    :config
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys))
 #+end_src
 * org-drill
 #+begin_src emacs-lisp
