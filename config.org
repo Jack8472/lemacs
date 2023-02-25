@@ -177,7 +177,6 @@ Example of sysvars.el
 * General.el
 #+begin_src emacs-lisp
   (use-package general
-    :after evil
     :config
     (general-auto-unbind-keys)
     (general-create-definer lemacs/global-leader-key
@@ -190,6 +189,7 @@ Example of sysvars.el
       :states '(normal insert emacs emacs motion)
       :prefix "SPC m"
       :global-prefix "M-SPC m")
+    )
 #+end_src
 ** Global leader
 #+begin_src emacs-lisp
@@ -199,10 +199,6 @@ Example of sysvars.el
     "SPC" '(execute-extended-command :which-key "M-x")
     "c" 'org-capture
     "e" 'eval-last-sexp
-    "y" '(:ignore t :which-key "yasnippet")
-    "y y" 'yas-insert-snippet
-    "y n" 'yas-new-snippet
-    "y v" 'yas-visit-snippet-file
 
     "b" '(:ignore t :which-key "buffer")
     "RET" 'consult-bookmark
@@ -223,32 +219,14 @@ Example of sysvars.el
     "f s" 'save-buffer
     "f l" 'consult-locate
 
-    "g" '(:ignore t :which-key "git")
-    "g g" 'magit-status
-
     "h" '(:ignore t :which-key "help")
     "h r" '((lambda () (interactive)
               (load-file "~/.emacs.d/init.el"))
             :which-key "Reload emacs config")
     "h d" 'dashboard-refresh-buffer
-    "h v" 'helpful-variable
-    "h f" 'helpful-function
-    "h s" 'helpful-symbol
-    "h b" 'helpful-key
 
-    ;; "m" '(:ignore t :which-key "local leader")
-
-    "n" '(:ignore t :which-key "note")
-    "n b" 'denote-link-show-backlinks-buffer
-    "n l" 'denote-link-or-create
-    "n n" 'denote
-    "n o" 'denote-open-or-create
-    "n d" 'denote-date
-    "n s" '(lemacs/consult-ripgrep-notes-directory :which-key "search")
-    "n f" 'consult-notes
-    "n m" 'list-denotes
-
-    "o" '(:ignore t :which-key "open")
+    "o" '(:ignore t
+                  :which-key "open")
     "o a" 'org-agenda
 
     "q" '(:ignore t :which-key "quit")
@@ -275,7 +253,7 @@ Example of sysvars.el
     "w w" 'other-window
     "w r" 'split-window-right
     "w b" 'split-window-below
-    )
+ )
 #+end_src
 ** Local leader
 *** Org-agenda
@@ -327,10 +305,6 @@ Example of sysvars.el
        :keymaps 'dired-mode-map
        "h" 'dired-up-directory)
 #+end_src
-** Close parens
-#+begin_src emacs-lisp
-)
-#+end_src
 * Unfo-fu
 #+begin_src emacs-lisp
 (use-package undo-fu
@@ -380,28 +354,26 @@ Example of sysvars.el
 * Completion
 ** All the icons
 #+begin_src emacs-lisp
-(use-package all-the-icons)
-(use-package all-the-icons-completion
-  :after (marginalia all-the-icons)
-  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
-  :init
-  (all-the-icons-completion-mode))
+  (use-package all-the-icons)
+  (use-package all-the-icons-completion
+    :after (marginalia all-the-icons)
+    :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+    :init
+    (all-the-icons-completion-mode))
 #+end_src
 ** Which key
 #+begin_src emacs-lisp
   (use-package which-key
     :diminish which-key-mode
-    :defer 5
     :config
     (setq which-key-side-window-max-height 0.5)
-    (setq which-key-idle-delay 0.5)
+    (setq which-key-idle-delay 0.3)
     (which-key-mode)
     )
 #+end_src
 ** Helpful
 #+begin_src emacs-lisp
   (use-package helpful
-    :commands (helpful-callable helpful-variable helpful-command helpful-key)
     :custom
     (counsel-describe-function-function #'helpful-callable)
     (counsel-describe-variable-function #'helpful-variable)
@@ -410,7 +382,15 @@ Example of sysvars.el
     ([remap describe-command] . helpful-command)
     ([remap describe-variable] . helpful-variable)
     ([remap describe-key] . helpful-key)
-  )
+    :general
+    (lemacs/global-leader-key
+      "h v" 'helpful-variable
+      "h f" 'helpful-function
+      "h s" 'helpful-symbol
+      "h b" 'helpful-key
+      "h c" 'helpful-callable
+      )
+    )
 #+end_src
 ** Vertico
 #+begin_src emacs-lisp
@@ -474,7 +454,7 @@ Example of sysvars.el
     :init
     (marginalia-mode))
 #+end_src
-** TODO Consult
+** Consult
 #+begin_src emacs-lisp
   ;; Example configuration for Consult
   (use-package consult
@@ -636,25 +616,7 @@ Example of sysvars.el
 #+end_src
 ** TODO Embark
 #+begin_src emacs-lisp
-  (use-package embark
-    :bind
-    (("C-." . embark-act)         ;; pick some comfortable binding
-     ("C-;" . embark-dwim)        ;; good alternative: M-.
-     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
-
-    :init
-
-    ;; Optionally replace the key help with a completing-read interface
-    (setq prefix-help-command #'embark-prefix-help-command)
-
-    :config
-
-    ;; Hide the mode line of the Embark live/completions buffers
-    (add-to-list 'display-buffer-alist
-                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                   nil
-                   (window-parameters (mode-line-format . none)))))
-
+  (use-package embark)
   ;; Consult users will also want the embark-consult package.
   (use-package embark-consult
     :hook
@@ -663,7 +625,6 @@ Example of sysvars.el
 ** TODO Hydra
 #+begin_src emacs-lisp
 (use-package hydra
-  :defer t
   :commands defhydra
   )
 
@@ -689,16 +650,21 @@ Example of sysvars.el
 #+begin_src emacs-lisp
   (use-package denote
     :config
-    (setq denote-known-keywords '("spotkanie" "szkolenie" "osoba" "log" "metanote"))
+    (setq denote-known-keywords '("spotkanie" "szkolenie" "osoba" "log" "idea" "metanote"))
     (setq denote-date-prompt-use-org-read-date t)
+    :general
+    (lemacs/global-leader-key
+      "n" '(:ignore t :which-key "note")
+      "n b" 'denote-link-show-backlinks-buffer
+      "n l" 'denote-link-or-create
+      "n n" 'denote
+      "n o" 'denote-open-or-create
+      "n d" 'denote-date
+      "n s" '(lemacs/consult-ripgrep-notes-directory :which-key "search")
+      "n f" 'consult-notes
+      "n m" 'list-denotes
+      )
     )
-
-  (add-to-list 'load-path "~/.emacs.d/denote-menu/")
-  (require 'denote-menu)
-  (define-key denote-menu-mode-map (kbd "c") #'denote-menu-clear-filters)
-  (define-key denote-menu-mode-map (kbd "/ r") #'denote-menu-filter)
-  (define-key denote-menu-mode-map (kbd "/ k") #'denote-menu-filter-by-keyword)
-  (define-key denote-menu-mode-map (kbd "e") #'denote-menu-export-to-dired)
 #+end_src
 * org-mode
 #+begin_src emacs-lisp
@@ -924,6 +890,11 @@ Example of sysvars.el
 #+begin_src emacs-lisp
   (use-package magit
     :commands (magit-status)
+    :general
+    (lemacs/global-leader-key
+      "g" '(:ignore t :which-key "git")
+      "g g" 'magit-status
+      )
     )
 #+end_src
 * Avy
@@ -940,16 +911,25 @@ Example of sysvars.el
 * Yassnippet
 #+begin_src emacs-lisp
   (use-package yasnippet
-  :config
-  (yas-global-mode t)
-  )
+    :config
+    (yas-global-mode t)
+    :general
+    (lemacs/global-leader-key
+      "y" '(:ignore t :which-key "yasnippet")
+      "y y" 'yas-insert-snippet
+      "y n" 'yas-new-snippet
+      "y v" 'yas-visit-snippet-file
+      )
+    )
 #+end_src
 * Auto package update
 #+begin_src emacs-lisp
-  (use-package auto-package-update
-    :custom
-    (auto-package-update-prompt-before-update t)
-    (auto-package-update-hide-results t))
+        (use-package auto-package-update
+          :custom
+          (auto-package-update-prompt-before-update t)
+          (auto-package-update-hide-results t)
+          )
+
 #+end_src
 
 * Dashboard
@@ -977,7 +957,6 @@ Example of sysvars.el
 * Hl-todo
 #+begin_src emacs-lisp
   (use-package hl-todo
-    :defer 5
     :config
     (global-hl-todo-mode t)
     (setq hl-todo-keyword-faces
@@ -1019,6 +998,15 @@ doesnt work on windows?
       (dashboard-refresh-buffer)
       )
 #+end_src
+* Denote-menu
+#+begin_src emacs-lisp
+  (add-to-list 'load-path "~/.emacs.d/denote-menu/")
+  (require 'denote-menu)
+  (define-key denote-menu-mode-map (kbd "c") #'denote-menu-clear-filters)
+  (define-key denote-menu-mode-map (kbd "/ r") #'denote-menu-filter)
+  (define-key denote-menu-mode-map (kbd "/ k") #'denote-menu-filter-by-keyword)
+  (define-key denote-menu-mode-map (kbd "e") #'denote-menu-export-to-dired)
+#+end_src
 * Disabled/experimental
 ** org-mode
   (setq org-use-sub-superscripts t)
@@ -1050,12 +1038,3 @@ doesnt work on windows?
     :commands command-log-mode)
 #+end_src
 
-* Denote-menu
-#+begin_src emacs-lisp
-  (add-to-list 'load-path "~/.emacs.d/denote-menu/")
-  (require 'denote-menu)
-  (define-key denote-menu-mode-map (kbd "c") #'denote-menu-clear-filters)
-  (define-key denote-menu-mode-map (kbd "/ r") #'denote-menu-filter)
-  (define-key denote-menu-mode-map (kbd "/ k") #'denote-menu-filter-by-keyword)
-  (define-key denote-menu-mode-map (kbd "e") #'denote-menu-export-to-dired)
-#+end_src
