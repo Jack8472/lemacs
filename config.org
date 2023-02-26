@@ -832,6 +832,17 @@ Example of sysvars.el
 #+begin_src emacs-lisp
 (use-package org-drill)
 #+end_src
+* Presentations
+#+begin_src emacs-lisp
+  (use-package ox-reveal
+    :config
+    (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
+    )
+  (use-package org-present
+    )
+  (use-package org-tree-slide
+    )
+#+end_src
 * mixed-pitch
 #+begin_src emacs-lisp
   (use-package mixed-pitch
