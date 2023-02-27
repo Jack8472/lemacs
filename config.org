@@ -646,6 +646,7 @@ Example of sysvars.el
       "m" (general-key "C-c")
       "s" 'org-schedule
       "d" 'org-deadline
+      "l" 'org-toggle-link-display
       )
     (lemacs/local-leader-key
       :states 'motion 
