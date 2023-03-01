@@ -839,9 +839,29 @@ Example of sysvars.el
     :config
     (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
     )
-  (use-package org-present
-    )
   (use-package org-tree-slide
+    )
+#+end_src
+** Org-autolist
+#+begin_src emacs-lisp
+  (use-package org-autolist
+    :hook (org-mode . org-autolist-mode))
+#+end_src
+* org-mind-map
+#+begin_src emacs-lisp
+  (use-package org-mind-map
+    :init
+    (require 'ox-org)
+    ;; Uncomment the below if 'ensure-system-packages` is installed
+    ;;:ensure-system-package (gvgen . graphviz)
+    :config
+    (setq org-mind-map-engine "dot")       ; Default. Directed Graph
+    ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
+    ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
+    ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
+    ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
+    ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
+    ;; (setq org-mind-map-engine "circo")  ; Circular Layout
     )
 #+end_src
 * mixed-pitch
