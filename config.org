@@ -612,8 +612,24 @@ Example of sysvars.el
 #+begin_src emacs-lisp
   (use-package denote
     :config
-    (setq denote-known-keywords '("spotkanie" "szkolenie" "osoba" "log" "idea" "metanote"))
+    (setq denote-known-keywords '("spotkanie" "szkolenie" "osoba" "idea" "metanote"))
     (setq denote-date-prompt-use-org-read-date t)
+    (defun my-denote-journal ()
+      "Create an entry tagged 'journal' with the date as its title."
+      (interactive)
+      (denote
+       (format-time-string "%A %e %B %Y") ; format like Tuesday 14 June 2022
+       '("journal"))) ; multiple keywords are a list of strings: '("one" "two")
+    (defun my-denote-create-new-note-from-region (beg end)
+      "Create note whose contents include the text between BEG and END.
+       Prompt for title and keywords of the new note."
+      (interactive "r")
+      (if-let (((region-active-p))
+               (text (buffer-substring-no-properties beg end)))
+          (progn
+            (denote (denote--title-prompt) (denote--keywords-prompt))
+            (insert text))
+        (user-error "No region is available")))
     :general
     (lemacs/global-leader-key
       "n" '(:ignore t :which-key "note")
@@ -625,6 +641,8 @@ Example of sysvars.el
       "n s" '(lemacs/consult-ripgrep-notes-directory :which-key "search")
       "n f" 'consult-notes
       "n m" 'list-denotes
+      "n j" 'my-denote-journal
+      "n r" 'my-denote-create-new-note-from-region
       )
     )
 #+end_src
@@ -687,6 +705,7 @@ Example of sysvars.el
                                   "/org-drill.org")
                                 :maxlevel . 9)
                                (org-agenda-files :maxlevel . 9)
+                               (nil :maxlevel . 9)
                                ))
     (setq org-outline-path-complete-in-steps nil)      ; Refile in a single go
     (setq org-refile-use-outline-path 'file)           ; Show full paths for refiling
@@ -846,23 +865,6 @@ Example of sysvars.el
 #+begin_src emacs-lisp
   (use-package org-autolist
     :hook (org-mode . org-autolist-mode))
-#+end_src
-* org-mind-map
-#+begin_src emacs-lisp
-  (use-package org-mind-map
-    :init
-    (require 'ox-org)
-    ;; Uncomment the below if 'ensure-system-packages` is installed
-    ;;:ensure-system-package (gvgen . graphviz)
-    :config
-    (setq org-mind-map-engine "dot")       ; Default. Directed Graph
-    ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
-    ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
-    ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
-    ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
-    ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
-    ;; (setq org-mind-map-engine "circo")  ; Circular Layout
-    )
 #+end_src
 * mixed-pitch
 #+begin_src emacs-lisp
@@ -1084,3 +1086,20 @@ doesnt work on windows?
     :commands command-log-mode)
 #+end_src
 
+** org-mind-map
+#+begin_src emacs-lisp
+  ;; (use-package org-mind-map
+  ;;   :init
+  ;;   (require 'ox-org)
+  ;;   ;; Uncomment the below if 'ensure-system-packages` is installed
+  ;;   ;;:ensure-system-package (gvgen . graphviz)
+  ;;   :config
+  ;;   (setq org-mind-map-engine "dot")       ; Default. Directed Graph
+  ;;   ;; (setq org-mind-map-engine "neato")  ; Undirected Spring Graph
+  ;;   ;; (setq org-mind-map-engine "twopi")  ; Radial Layout
+  ;;   ;; (setq org-mind-map-engine "fdp")    ; Undirected Spring Force-Directed
+  ;;   ;; (setq org-mind-map-engine "sfdp")   ; Multiscale version of fdp for the layout of large graphs
+  ;;   ;; (setq org-mind-map-engine "twopi")  ; Radial layouts
+  ;;   ;; (setq org-mind-map-engine "circo")  ; Circular Layout
+  ;;   )
+#+end_src
