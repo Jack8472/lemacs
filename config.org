@@ -1001,6 +1001,20 @@ Example of sysvars.el
         ))
     )
 #+end_src
+* Bicycle
+#+begin_src emacs-lisp
+  (use-package bicycle
+    :after outline
+    :bind (:map outline-minor-mode-map
+                ([C-tab] . bicycle-cycle)
+                ([S-tab] . bicycle-cycle-global)))
+
+  (use-package prog-mode
+    :ensure nil
+    :config
+    (add-hook 'prog-mode-hook 'outline-minor-mode)
+    (add-hook 'prog-mode-hook 'hs-minor-mode))
+#+end_src
 * Functions
 ** TODO Notes search function
 doesnt work on windows?
